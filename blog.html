@@ -178,7 +178,8 @@
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                Note that the different vertex types could be stored in separate collections (products, customers, etc.), but for the sake of simplicity, we will just use a generic vertex collection with a type designator.&nbsp;
+                Note that the different vertex types could be stored in separate collections (products, customers, etc.), but for the sake of simplicity, we will just use a generic vertex collection with a type designator.
+                The example below looks for outbound relationships from the target product.&nbsp;
             </div>
         </div>
         <div class="media-container-row">&nbsp;</div>
@@ -233,6 +234,24 @@ db.vertex.aggregate( [
                 </pre>
             </div>
         </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                The query above performs the following steps in the aggregation pipeline:&nbsp;
+                <ul>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a> to select the target product node.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to find all outbound edges from target node.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get the data we want to work with.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a> to traverse the edges having label "invokes", up to 5 levels deep.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get an edges array.  Use $concatArrays to include the target node in the array.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> to get the documents in the edges  array.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a> on the "steps" field to list edges in order of traversal.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to get all nodes in the traversal path.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> to get the documents in the vertexes array.</li>
+                    <li>Use <a href="https://docs.mongodb.com/v3.2/reference/operator/aggregation/group/">$group</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to aggregate the documents from each traversal step into a single document with a list of edges and nodes.</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -249,6 +268,118 @@ db.vertex.aggregate( [
     </div>
 </section>
 
+<section class="mbr-section article content1 cid-qvbjomyZfb" id="content1-9y" data-rv-view="548">
+    <div class="container">
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                After running the query, we get the following output. This document gives us access to all edges and nodes that resulted from the graph traversal.&nbsp;
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <!-- Remember code snippets are whitespace sensitive, so do not indent here or will appear centered in <pre> block -->
+                <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
+                <pre>
+                    <code>
+/* 1 */
+{
+"edges" : [
+{
+"_id" : ObjectId("59b604570d13f46fca708b8c"),
+"from" : "Node A",
+"to" : "Node B",
+"label" : "invokes"
+},
+{
+"_id" : ObjectId("59d85b8c05320bf9559487e2"),
+"from" : "Node B",
+"to" : "Node C",
+"label" : "invokes",
+"steps" : NumberLong(0)
+},
+{
+"_id" : ObjectId("59dc4d0405320bf95594d0b6"),
+"from" : "Node C",
+"to" : "Node D",
+"label" : "invokes",
+"steps" : NumberLong(1)
+},
+{
+"_id" : ObjectId("59dc4d5605320bf95594d0d0"),
+"from" : "Node D",
+"to" : "Node E",
+"label" : "invokes",
+"steps" : NumberLong(2)
+},
+{
+"_id" : ObjectId("59dc4ef505320bf95594d121"),
+"from" : "Node E",
+"to" : "Node F",
+"label" : "invokes",
+"steps" : NumberLong(3)
+}
+],
+"vertexes" : [
+{
+"_id" : ObjectId("59d85aaa05320bf9559487aa"),
+"name" : "Node B",
+"weight" : 75,
+"x" : 100,
+"y" : 200,
+"level" : 0
+},
+{
+"_id" : ObjectId("59d85ad705320bf9559487b4"),
+"name" : "Node C",
+"weight" : 75,
+"x" : 100,
+"y" : 200,
+"level" : 0
+},
+{
+"_id" : ObjectId("59dc4ca405320bf95594d096"),
+"name" : "Node D",
+"weight" : 75,
+"x" : 100,
+"y" : 200,
+"level" : 0
+},
+{
+"_id" : ObjectId("59dc4cbb05320bf95594d09e"),
+"name" : "Node E",
+"weight" : 75,
+"x" : 100,
+"y" : 200,
+"level" : 0
+},
+{
+"_id" : ObjectId("59dc4ebd05320bf95594d10f"),
+"name" : "Node F",
+"weight" : 75,
+"x" : 100,
+"y" : 200,
+"level" : 0
+}
+]
+}
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                Thanks for reading.  In upcoming blog posts, I will soon cover the follwing topics to improve on the example above.&nbsp;
+                <ul>
+                    <li><strong>Creating a Java DSL (domain-specific language) for MongoDB graph queries</strong>, to make it less unwieldly, with a syntax similar to <a href="https://neo4j.com/developer/cypher-query-language/">Cypher</a></li>
+                    <li><strong>Faceted search on graph data using $graphLookup and $facet</strong></li>
+                </ul>
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+    </div>
+</section>
 <!--
 <section class="cid-qvbjxOlHgO" id="image1-80" data-rv-view="550">
 
