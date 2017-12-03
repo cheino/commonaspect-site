@@ -141,7 +141,7 @@
 
     <div class="container">
         <div class="media-container-row">
-            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">Multi-modal NoSQL database MongoDB added several interesting new features in version 3.4, including the <a href="#">$graphlookup</a> and <a href="#">$facet</a> aggregation stages. In this article,
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">Multi-modal NoSQL database MongoDB added several interesting new features in version 3.3, including the <a href="#">$lookup</a>, <a href="#">$graphlookup</a>, and <a href="#">$facet</a> aggregation stages. In this article,
                 I will explore how well the new $graphlookup feature compares to the graph querying capabilities of a specialized graph database such as Neo4j.  In particular, we will explain a technique storing graph vertexes and
                 edges in separate MongoDB collections to allow maximum flexibility for querying based on both vertex and edge properties.  At the time of writing, I did not find any concrete examples of this technique online, although the
                 MongoDB slide presentation <a href="#">here</a> makes mention of edge collections.  This example is based on my own experimentation.&nbsp;
@@ -149,7 +149,7 @@
         </div>
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
-            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">For our example data, let’s choose a classic example of a graph application: a product recommendations engine for an e-commerce site.&nbsp;
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">For our data, we'll use a classic example of a graph application: a product recommendations engine for an e-commerce site.&nbsp;
             </div>
         </div>
     </div>
@@ -169,10 +169,24 @@
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <!-- TODO Should we name "vertexes" "products" instead? -->
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                (See "Product Recommendations Graph" file in yEd)  This creates "You may also like" functionality.
+                <ol>
+                    <li>Start with current product being viewed by customer</li>
+                    <li>Traverse "bought" edges to customers and products.</li>
+                    <li>Select the products along the traversal path.</li>
+                </ol>
+                This gives us the other products bought by any customer who purchased the original product. The strength of each recommendation returned can be determined by its proximity to the starting product.
+                &nbsp;
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">My inspiration for this approach comes from the way graph databases such as Neo4j or OrientDB store vertexes and edges as separate objects in the database.
                 For purposes of this example, we will create two collections in MongoDB, named vertexes and edges.  The documents in the vertexes collection will represent our e-commerce products and contain their attributes. The
                 edge collection documents will represent the edges or relationships between vertexes or nodes, including a relationship type, a from_id for the source node ID, a to_id for the target node ID, and any other custom
-                properties you want to include.&nbsp;
+                properties you want to include.  Note that one advantage of this approach is that we do not need to embed the edges within the nodes, in fact the nodes do not need to contain any relationship data whatsoever.&nbsp;
             </div>
         </div>
         <div class="media-container-row">&nbsp;</div>
@@ -262,7 +276,7 @@ db.vertex.aggregate( [
     <div class="container">
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                <blockquote>This is a caution or other type of aside message we want to call the user's attention to.  This can be as long as we want it to be.&nbsp;</blockquote>
+                <blockquote>The refs property is necessary to allow bidirectional traversal, similar to "both" in Neo4j Cypher.&nbsp;</blockquote>
             </div>
         </div>
     </div>
@@ -272,7 +286,7 @@ db.vertex.aggregate( [
     <div class="container">
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                After running the query, we get the following output. This document gives us access to all edges and nodes that resulted from the graph traversal.&nbsp;
+                After running the query, we get the following output. This document gives us access to all edges and nodes that resulted from the graph traversal, in the correct sequence of the traversal path.&nbsp;
             </div>
         </div>
         <div class="media-container-row">&nbsp;</div>
@@ -370,9 +384,12 @@ db.vertex.aggregate( [
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                Thanks for reading.  In upcoming blog posts, I will soon cover the follwing topics to improve on the example above.&nbsp;
+                Thanks for reading.  In upcoming posts, I plan to cover the following related topics to improve on the example above.&nbsp;
                 <ul>
-                    <li><strong>Creating a Java DSL (domain-specific language) for MongoDB graph queries</strong>, to make it less unwieldly, with a syntax similar to <a href="https://neo4j.com/developer/cypher-query-language/">Cypher</a></li>
+                    <li><strong>Creating a Java DSL (domain-specific language) for MongoDB graph queries</strong>, with a syntax similar to <a href="https://neo4j.com/developer/cypher-query-language/">Cypher</a></li>
+                    <li><strong>A Java library to help manage the nodes and edges</strong></li>
+                    <li><strong>More graph query examples</strong></li>
+                    <li><strong>Indexing strategies for graph data in MongoDB</strong></li>
                     <li><strong>Faceted search on graph data using $graphLookup and $facet</strong></li>
                 </ul>
             </div>
