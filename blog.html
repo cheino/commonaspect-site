@@ -188,7 +188,7 @@
                     <li>Traverse "purchased" edges to customers and products.</li>
                     <li>Select the products along the traversal path.</li>
                 </ol>
-                This gives us the other products bought by any customer who purchased the original product. The strength of each recommendation returned can be determined by its proximity to the starting product.
+                This gives us the other products purchased by any customer who purchased the original product, and also products purchased by other customers who purchased those products. These types of "friend of a friend" queries are what graph databases excel at, while a traditional relational database is not ideal for this due to the arbitrary number of SQL joins which would be involved since this has performance implications and also typically requires programmatic SQL generation.  The strength of each recommendation returned can be determined by its proximity to the starting product.
                 &nbsp;
             </div>
         </div>
