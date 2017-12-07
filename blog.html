@@ -132,13 +132,11 @@
 
 <section class="mbr-section content4 cid-qvbjfGj2Ze" id="content4-7x" data-rv-view="546">
 
-    
-
     <div class="container">
         <div class="media-container-row">
             <div class="title col-12 col-md-8">
                 <!--<h2 class="align-center pb-3 mbr-fonts-style display-5">GRAPH DATABASE IN MONGODB 3.4 - PART 1: EXTERNAL EDGE COLLECTIONS</h2>-->
-                <h2 class="align-center pb-3 mbr-fonts-style display-5">EMULATING NEO4J GRAPH DB NODES AND EDGES IN MONGODB 3.4</h2>
+                <h2 class="align-center pb-3 mbr-fonts-style display-5">EMULATING NEO4J GRAPH DB NODES AND EDGES IN MONGODB 3.3</h2>
                 <h3 class="mbr-section-subtitle align-center mbr-light mbr-fonts-style display-7"><em>By Chris Heino posted October 15, 2017</em></h3>
                 
             </div>
@@ -147,12 +145,11 @@
 </section>
 
 <section class="mbr-section article content1 cid-qvbjomyZfb" id="content1-7y" data-rv-view="548">
-    
-     
-
     <div class="container">
         <div class="media-container-row">
-            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">Multi-modal NoSQL database MongoDB added several interesting new features in version 3.3, including the <a href="#">$lookup</a>, <a href="#">$graphlookup</a>, and <a href="#">$facet</a> aggregation stages. In this article,
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <h3>Introduction</h3>
+                Multi-modal NoSQL database MongoDB added several interesting new features in version 3.3, including the <a href="#">$lookup</a>, <a href="#">$graphlookup</a>, and <a href="#">$facet</a> aggregation stages. In this article,
                 I will explore how well the new $graphlookup feature compares to the graph querying capabilities of a specialized graph database such as Neo4j.  In particular, we will explain a technique storing graph vertexes and
                 edges in separate MongoDB collections to allow maximum flexibility for querying based on both vertex and edge properties.  At the time of writing, I did not find any concrete examples of this technique online, although the
                 MongoDB slide presentation <a href="#">here</a> makes mention of edge collections.  This example is based on my own experimentation.&nbsp;
@@ -160,7 +157,9 @@
         </div>
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
-            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">For our data, we'll use a classic example of a graph application: a product recommendations engine for an e-commerce site.&nbsp;
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <h3>Data Schema</h3>
+                For our data, we'll use a classic example of a graph theory application: a simple product recommendations engine as you might find on a typical e-commerce website.&nbsp;
             </div>
         </div>
     </div>
@@ -186,7 +185,7 @@
                 This creates "You may also like" functionality.
                 <ol>
                     <li>Start with current product being viewed by customer</li>
-                    <li>Traverse "bought" edges to customers and products.</li>
+                    <li>Traverse "purchased" edges to customers and products.</li>
                     <li>Select the products along the traversal path.</li>
                 </ol>
                 This gives us the other products bought by any customer who purchased the original product. The strength of each recommendation returned can be determined by its proximity to the starting product.
@@ -196,7 +195,9 @@
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <!-- TODO Should we name "vertexes" "products" instead? -->
-            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">My inspiration for this approach comes from the way graph databases such as Neo4j or OrientDB store vertexes and edges as separate objects in the database.
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <h3>MongoDB Queries</h3>
+                The approach below is inspired by the way graph databases such as Neo4j or OrientDB store vertexes and edges as separate objects in the database.
                 For purposes of this example, we will create two collections in MongoDB, named vertexes and edges.  The documents in the vertexes collection will represent our e-commerce products and contain their attributes. The
                 edge collection documents will represent the edges or relationships between vertexes or nodes, including a relationship type, a from_id for the source node ID, a to_id for the target node ID, and any other custom
                 properties you want to include.  Note that one advantage of this approach is that we do not need to embed the edges within the nodes, in fact the nodes do not need to contain any relationship data whatsoever.&nbsp;
@@ -397,7 +398,8 @@ db.vertex.aggregate( [
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                Thanks for reading.  In upcoming posts, I plan to cover the following related topics to improve on the example above.&nbsp;
+                <h3>Conclusion</h3>
+                The results of this brief experiment are promising for MongoDB's graph query capabilities.  We were able to successfully model a directed property graph including both node and edge properties and then query those properties while traversing the graph.  The query syntax is more verbose than Neo4j's Cypher, but for those already using MongoDB for their application, this seems to be a feasible alternative to deploying a dedicated graph database.  Another advantage is that since the graph queries occur in Mongo's aggregation framework, it's easy to integrate with other Mongo features such as faceted search, whereas Neo4j does not support faceted search out of the box.  Thanks for reading.  In upcoming posts, I plan to cover the following related topics to improve on the example above.&nbsp;
                 <ul>
                     <li><strong>Creating a Java DSL (domain-specific language) for MongoDB graph queries</strong>, with a syntax similar to <a href="https://neo4j.com/developer/cypher-query-language/">Cypher</a></li>
                     <li><strong>A Java library to help manage the nodes and edges</strong></li>
