@@ -182,6 +182,205 @@
         <div class="media-container-row">
             <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                The node data will be stored in two Mongo collections named customer and product, and we will use another collection for the edge data.
+                &nbsp;
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <strong>Collection: customer</strong>
+                <!-- Remember code snippets are whitespace sensitive, so do not indent here or will appear centered in <pre> block -->
+                <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
+                <pre>
+                    <code>
+/* 1 */
+{
+    "_id" : ObjectId("5a0bda87e7a83c9369d6f92a"),
+    "name" : "Customer 1"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5a0bda9fe7a83c9369d6f92c"),
+    "name" : "Customer 2"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5a0bdab3e7a83c9369d6f932"),
+    "name" : "Customer 3"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("5a0bdac5e7a83c9369d6f938"),
+    "name" : "Customer 4"
+}
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <strong>Collection: product</strong>
+                <!-- Remember code snippets are whitespace sensitive, so do not indent here or will appear centered in <pre> block -->
+                <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
+                <pre>
+                    <code>
+/* 1 */
+{
+    "_id" : ObjectId("5a0bd9f8e7a83c9369d6f90c"),
+    "name" : "Product A"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5a0bda22e7a83c9369d6f914"),
+    "name" : "Product B"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5a0bda3ee7a83c9369d6f91a"),
+    "name" : "Product C"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("5a0bda68e7a83c9369d6f920"),
+    "name" : "Product D"
+}
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <strong>Collection: edge</strong>
+                <!-- Remember code snippets are whitespace sensitive, so do not indent here or will appear centered in <pre> block -->
+                <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
+                <pre>
+                    <code>
+/* 1 */
+{
+    "_id" : ObjectId("59b604570d13f46fca708b8c"),
+    "from" : "Node A",
+    "to" : "Node B",
+    "label" : "invokes"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("59d85b8c05320bf9559487e2"),
+    "from" : "Node B",
+    "to" : "Node C",
+    "label" : "invokes"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("59dc4d0405320bf95594d0b6"),
+    "from" : "Node C",
+    "to" : "Node D",
+    "label" : "invokes"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("59dc4d5605320bf95594d0d0"),
+    "from" : "Node D",
+    "to" : "Node E",
+    "label" : "invokes"
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("59dc4ef505320bf95594d121"),
+    "from" : "Node E",
+    "to" : "Node F",
+    "label" : "invokes"
+}
+
+/* 6 */
+{
+    "_id" : ObjectId("59fd39ac4779d00117ffee34"),
+    "from" : "Customer 1",
+    "to" : "Product D",
+    "refs" : [
+        ObjectId("59fd39d74779d00117ffee3e")
+    ],
+    "label" : "viewed"
+}
+
+/* 7 */
+{
+    "_id" : ObjectId("59fd39d74779d00117ffee3e"),
+    "from" : "Customer 1",
+    "to" : "Product A",
+    "refs" : [
+        ObjectId("59fd39ac4779d00117ffee34"),
+        ObjectId("59fd3a164779d00117ffee48")
+    ],
+    "label" : "bought"
+}
+
+/* 8 */
+{
+    "_id" : ObjectId("59fd3a164779d00117ffee48"),
+    "from" : "Customer 2",
+    "to" : "Product A",
+    "refs" : [
+        ObjectId("59fd39d74779d00117ffee3e"),
+        ObjectId("59fd3a384779d00117ffee4a")
+    ],
+    "label" : "bought"
+}
+
+/* 9 */
+{
+    "_id" : ObjectId("59fd3a384779d00117ffee4a"),
+    "from" : "Customer 2",
+    "to" : "Product B",
+    "refs" : [
+        ObjectId("59fd3a164779d00117ffee48"),
+        ObjectId("59fd3a594779d00117ffee54")
+    ],
+    "label" : "bought"
+}
+
+/* 10 */
+{
+    "_id" : ObjectId("59fd3a594779d00117ffee54"),
+    "from" : "Customer 3",
+    "to" : "Product B",
+    "refs" : [
+        ObjectId("59fd3a384779d00117ffee4a"),
+        ObjectId("59fd3a794779d00117ffee58")
+    ],
+    "label" : "bought"
+}
+
+/* 11 */
+{
+    "_id" : ObjectId("59fd3a794779d00117ffee58"),
+    "from" : "Customer 3",
+    "to" : "Product C",
+    "refs" : [
+        ObjectId("59fd3a594779d00117ffee54")
+    ],
+    "label" : "bought"
+}
+                    </code>
+                </pre>
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <!-- TODO Should we name "vertexes" "products" instead? -->
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
                 This creates "You may also like" functionality.
                 <ol>
                     <li>Start with current product being viewed by customer</li>
@@ -196,7 +395,7 @@
         <div class="media-container-row">
             <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                <h3>MongoDB Queries</h3>
+                <h3>MongoDB Query</h3>
                 The approach below is inspired by the way graph databases such as Neo4j or OrientDB store vertexes and edges as separate objects in the database.
                 For purposes of this example, we will create two collections in MongoDB, named vertexes and edges.  The documents in the vertexes collection will represent our e-commerce products and contain their attributes. The
                 edge collection documents will represent the edges or relationships between vertexes or nodes, including a relationship type, a from_id for the source node ID, a to_id for the target node ID, and any other custom
@@ -206,7 +405,6 @@
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                Note that the different vertex types could be stored in separate collections (products, customers, etc.), but for the sake of simplicity, we will just use a generic vertex collection with a type designator.
                 The example below looks for outbound relationships from the target product.&nbsp;
             </div>
         </div>
@@ -218,46 +416,60 @@
                 <pre>
                     <code>
 db.vertex.aggregate( [
-  { $match: { "name": "Node A" } },
-  { $lookup: {
-          from: "edge",
-          localField: "name",
-          foreignField: "from",
-          as: "edge_docs"
-    }
-  },
-  { $project: {
-      "edge_docs": 1
-    }
-  },
-  { $graphLookup: {
-      from: "edge",
-      startWith: "$edge_docs.to",
-      connectFromField: "to",
-      connectToField: "from",
-      as: "invokers",
-      maxDepth: 5,
-      depthField: 'steps',
-      restrictSearchWithMatch: { "label" : "invokes" }
-    }
-  },
-  { $project: {
-      "edges" : { $concatArrays: [ "$$ROOT.edge_docs", "$invokers" ] }
-    }
-  },
-  { $unwind: "$edges" },
-  { $sort: { 'edges.steps': 1 } },
-  { $lookup: {
-          from: "vertex",
-          localField: "edges.to",
-          foreignField: "name",
-          as: "vertexes"
-    }
-  },
-  { $unwind: "$vertexes" },
-  { $group: { _id: null, edgs: { $push: "$edges" }, vrtxs: { $push: "$vertexes" } } },
-  { $project: { _id: 0, edges: "$edgs", vertexes: "$vrtxs" } }
-] )
+    { $match: { "name": "Product B" } },
+    { $lookup: {
+            from: "edge",
+            localField: "name",
+            foreignField: "to",
+            as: "edge_docs"
+        }
+    },
+    { $project: {
+            "edge_docs": 1
+        }
+    },
+    { $graphLookup: {
+            from: "edge",
+            startWith: "$edge_docs._id",
+            connectFromField: "refs",
+            connectToField: "_id",
+            as: "pathEdges",
+            maxDepth: 2,
+            depthField: 'steps',
+            restrictSearchWithMatch: { "label" : "bought" }
+        }
+    },
+    // This is causing dupes in edges results since $$Root.edge_docs do not have "steps" property, so $setUnion further down below ignores these
+    //   { $project: {
+    //       "edges" : { $concatArrays: [ "$$ROOT.edge_docs", "$pathEdges" ] }
+    //     }
+    //   },
+    { $project: {
+            "edges" : "$pathEdges"
+        }
+    },
+    { $unwind: "$edges" },
+    { $sort: { 'edges.steps': 1 } },
+    { $lookup: {
+            from: "vertex",
+            localField: "edges.from",
+            foreignField: "name",
+            as: "customers"
+        }
+    },
+    { $unwind: "$customers" },
+    { $lookup: {
+            from: "vertex",
+            localField: "edges.to",
+            foreignField: "name",
+            as: "products"
+        }
+    },
+    { $unwind: "$products" },
+    { $group: { _id: null, edgs: { $push: "$edges" }, cstmrs: { $push: "$customers" }, prdcts: { $push: "$products" } } },
+    // We use $setUnion below to deduplicate the edges and vertexes arrays
+    { $project: { _id: 0, edges: { "$setUnion": [ "$edgs", [] ] }, customers: { "$setUnion": [ "$cstmrs", [] ] }, products: { "$setUnion": [ "$prdcts", [] ]  } } }
+] ) 
                     </code>
                 </pre>
             </div>
@@ -310,86 +522,97 @@ db.vertex.aggregate( [
                 <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
                 <pre>
                     <code>
-/* 1 */
 {
-"edges" : [
-{
-"_id" : ObjectId("59b604570d13f46fca708b8c"),
-"from" : "Node A",
-"to" : "Node B",
-"label" : "invokes"
-},
-{
-"_id" : ObjectId("59d85b8c05320bf9559487e2"),
-"from" : "Node B",
-"to" : "Node C",
-"label" : "invokes",
-"steps" : NumberLong(0)
-},
-{
-"_id" : ObjectId("59dc4d0405320bf95594d0b6"),
-"from" : "Node C",
-"to" : "Node D",
-"label" : "invokes",
-"steps" : NumberLong(1)
-},
-{
-"_id" : ObjectId("59dc4d5605320bf95594d0d0"),
-"from" : "Node D",
-"to" : "Node E",
-"label" : "invokes",
-"steps" : NumberLong(2)
-},
-{
-"_id" : ObjectId("59dc4ef505320bf95594d121"),
-"from" : "Node E",
-"to" : "Node F",
-"label" : "invokes",
-"steps" : NumberLong(3)
-}
-],
-"vertexes" : [
-{
-"_id" : ObjectId("59d85aaa05320bf9559487aa"),
-"name" : "Node B",
-"weight" : 75,
-"x" : 100,
-"y" : 200,
-"level" : 0
-},
-{
-"_id" : ObjectId("59d85ad705320bf9559487b4"),
-"name" : "Node C",
-"weight" : 75,
-"x" : 100,
-"y" : 200,
-"level" : 0
-},
-{
-"_id" : ObjectId("59dc4ca405320bf95594d096"),
-"name" : "Node D",
-"weight" : 75,
-"x" : 100,
-"y" : 200,
-"level" : 0
-},
-{
-"_id" : ObjectId("59dc4cbb05320bf95594d09e"),
-"name" : "Node E",
-"weight" : 75,
-"x" : 100,
-"y" : 200,
-"level" : 0
-},
-{
-"_id" : ObjectId("59dc4ebd05320bf95594d10f"),
-"name" : "Node F",
-"weight" : 75,
-"x" : 100,
-"y" : 200,
-"level" : 0
-}
-]
+    "edges" : [
+        {
+            "_id" : ObjectId("59fd39d74779d00117ffee3e"),
+            "from" : "Customer 1",
+            "to" : "Product A",
+            "refs" : [
+                ObjectId("59fd39ac4779d00117ffee34"),
+                ObjectId("59fd3a164779d00117ffee48")
+            ],
+            "label" : "bought",
+            "steps" : NumberLong(2)
+        },
+        {
+            "_id" : ObjectId("59fd3a164779d00117ffee48"),
+            "from" : "Customer 2",
+            "to" : "Product A",
+            "refs" : [
+                ObjectId("59fd39d74779d00117ffee3e"),
+                ObjectId("59fd3a384779d00117ffee4a")
+            ],
+            "label" : "bought",
+            "steps" : NumberLong(1)
+        },
+        {
+            "_id" : ObjectId("59fd3a384779d00117ffee4a"),
+            "from" : "Customer 2",
+            "to" : "Product B",
+            "refs" : [
+                ObjectId("59fd3a164779d00117ffee48"),
+                ObjectId("59fd3a594779d00117ffee54")
+            ],
+            "label" : "bought",
+            "steps" : NumberLong(0)
+        },
+        {
+            "_id" : ObjectId("59fd3a594779d00117ffee54"),
+            "from" : "Customer 3",
+            "to" : "Product B",
+            "refs" : [
+                ObjectId("59fd3a384779d00117ffee4a"),
+                ObjectId("59fd3a794779d00117ffee58")
+            ],
+            "label" : "bought",
+            "steps" : NumberLong(0)
+        },
+        {
+            "_id" : ObjectId("59fd3a794779d00117ffee58"),
+            "from" : "Customer 3",
+            "to" : "Product C",
+            "refs" : [
+                ObjectId("59fd3a594779d00117ffee54")
+            ],
+            "label" : "bought",
+            "steps" : NumberLong(1)
+        }
+    ],
+    "customers" : [
+        {
+            "_id" : ObjectId("59eec94405320bf9559658c6"),
+            "type" : "customer",
+            "name" : "Customer 1"
+        },
+        {
+            "_id" : ObjectId("59eec95005320bf9559658ca"),
+            "type" : "customer",
+            "name" : "Customer 2"
+        },
+        {
+            "_id" : ObjectId("59eec95d05320bf9559658ce"),
+            "type" : "customer",
+            "name" : "Customer 3"
+        }
+    ],
+    "products" : [
+        {
+            "_id" : ObjectId("59eec87905320bf955965887"),
+            "type" : "product",
+            "name" : "Product A"
+        },
+        {
+            "_id" : ObjectId("59eec8e405320bf9559658a3"),
+            "type" : "product",
+            "name" : "Product B"
+        },
+        {
+            "_id" : ObjectId("59eec8f305320bf9559658ab"),
+            "type" : "product",
+            "name" : "Product C"
+        }
+    ]
 }
                     </code>
                 </pre>
