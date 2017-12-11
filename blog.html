@@ -377,7 +377,7 @@
                     <code>
 db.vertex.aggregate( [
     { $match: { "name": "Product B" } },
-    { $lookup: {
+        { $lookup: {
             from: "edge",
             localField: "name",
             foreignField: "to",
@@ -385,7 +385,7 @@ db.vertex.aggregate( [
         }
     },
     { $project: {
-            "edge_docs": 1
+        "edge_docs": 1
         }
     },
     { $graphLookup: {
@@ -411,25 +411,38 @@ db.vertex.aggregate( [
     { $unwind: "$edges" },
     { $sort: { 'edges.steps': 1 } },
     { $lookup: {
-            from: "vertex",
-            localField: "edges.from",
-            foreignField: "name",
+            from: "customer",
+            let: { from: "$edges.from", steps: "$edges.steps" },
+            pipeline: [
+                { $match:
+                    { $expr: { $eq: [ "$name",  "$$from" ] } }
+                },
+                { $project: { _id: "$_id", name: "$name", steps: "$$steps" } }
+            ],
             as: "customers"
         }
     },
     { $unwind: "$customers" },
+    { $sort: { 'customers.steps': 1 } },
     { $lookup: {
-            from: "vertex",
-            localField: "edges.to",
-            foreignField: "name",
+            from: "product",
+            let: { to: "$edges.to", steps: "$edges.steps" },
+            pipeline: [
+                { $match:
+                    { $expr: { $eq: [ "$name",  "$$to" ] } }
+                },
+                { $project: { _id: "$_id", name: "$name", steps: "$$steps" } }
+            ],
             as: "products"
         }
     },
     { $unwind: "$products" },
+    { $sort: { 'products.steps': 1 } },
     { $group: { _id: null, edgs: { $push: "$edges" }, cstmrs: { $push: "$customers" }, prdcts: { $push: "$products" } } },
     // We use $setUnion below to deduplicate the edges and vertexes arrays
-    { $project: { _id: 0, edges: { "$setUnion": [ "$edgs", [] ] }, customers: { "$setUnion": [ "$cstmrs", [] ] }, products: { "$setUnion": [ "$prdcts", [] ]  } } }
-] ) 
+    //   { $project: { _id: 0, edges: { "$setUnion": [ "$edgs", [] ] }, customers: { "$setUnion": [ "$cstmrs", [] ] }, products: { "$setUnion": [ "$prdcts", [] ]  } } }
+    { $project: { _id: 0, edges: "$edgs", customers: "$cstmrs", products: "$prdcts" } }
+] )
                     </code>
                 </pre>
             </div>
