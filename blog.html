@@ -375,9 +375,9 @@
                 <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
                 <pre>
                     <code>
-db.vertex.aggregate( [
+db.product.aggregate( [
     { $match: { "name": "Product B" } },
-        { $lookup: {
+    { $lookup: {
             from: "edge",
             localField: "name",
             foreignField: "to",
@@ -385,7 +385,7 @@ db.vertex.aggregate( [
         }
     },
     { $project: {
-        "edge_docs": 1
+            "edge_docs": 1
         }
     },
     { $graphLookup: {
@@ -399,15 +399,7 @@ db.vertex.aggregate( [
             restrictSearchWithMatch: { "label" : "bought" }
         }
     },
-    // This is causing dupes in edges results since $$Root.edge_docs do not have "steps" property, so $setUnion further down below ignores these
-    //   { $project: {
-    //       "edges" : { $concatArrays: [ "$$ROOT.edge_docs", "$pathEdges" ] }
-    //     }
-    //   },
-    { $project: {
-            "edges" : "$pathEdges"
-        }
-    },
+    { $project: { "edges" : "$pathEdges" } },
     { $unwind: "$edges" },
     { $sort: { 'edges.steps': 1 } },
     { $lookup: {
@@ -439,10 +431,26 @@ db.vertex.aggregate( [
     { $unwind: "$products" },
     { $sort: { 'products.steps': 1 } },
     { $group: { _id: null, edgs: { $push: "$edges" }, cstmrs: { $push: "$customers" }, prdcts: { $push: "$products" } } },
-    // We use $setUnion below to deduplicate the edges and vertexes arrays
-    //   { $project: { _id: 0, edges: { "$setUnion": [ "$edgs", [] ] }, customers: { "$setUnion": [ "$cstmrs", [] ] }, products: { "$setUnion": [ "$prdcts", [] ]  } } }
     { $project: { _id: 0, edges: "$edgs", customers: "$cstmrs", products: "$prdcts" } }
-] )
+] ).map( function(u) {
+    var customerIds = [], newCustomers = [];
+    for (var i = 0; i < u.customers.length; i++) {
+        var c = u.customers[i];
+        if (customerIds.indexOf(c._id.toString()) == -1)
+            newCustomers.push(c);
+        customerIds.push(c._id.toString());
+    }
+    var productIds = [], newProducts = [];
+    for (var i = 0; i < u.products.length; i++) {
+        var p = u.products[i];
+        if (productIds.indexOf(p._id.toString()) == -1)
+            newProducts.push(p);
+        productIds.push(p._id.toString());
+    }
+    u.customers = newCustomers;
+    u.products = newProducts;
+    return u;
+} );
                     </code>
                 </pre>
             </div>
