@@ -266,71 +266,71 @@
                     <code>
 /* 1 */
 {
-    "_id" : ObjectId("59fd39ac4779d00117ffee34"),
+    "_id" : ObjectId("5a0be126e7a83c9369d6fb40"),
     "from" : "Customer 1",
     "to" : "Product D",
     "refs" : [
-        ObjectId("59fd39d74779d00117ffee3e")
+        ObjectId("5a0be13ae7a83c9369d6fb48")
     ],
     "label" : "viewed"
 }
 
 /* 2 */
 {
-    "_id" : ObjectId("59fd39d74779d00117ffee3e"),
-    "from" : "Customer 1",
-    "to" : "Product A",
-    "refs" : [
-        ObjectId("59fd39ac4779d00117ffee34"),
-        ObjectId("59fd3a164779d00117ffee48")
-    ],
-    "label" : "bought"
+    "_id" : ObjectId("5a0be13ae7a83c9369d6fb48"),
+        "from" : "Customer 1",
+        "to" : "Product A",
+        "refs" : [
+            ObjectId("5a0be126e7a83c9369d6fb40"),
+            ObjectId("5a0be14de7a83c9369d6fb52")
+        ],
+        "label" : "bought"
 }
 
 /* 3 */
 {
-    "_id" : ObjectId("59fd3a164779d00117ffee48"),
+    "_id" : ObjectId("5a0be14de7a83c9369d6fb52"),
     "from" : "Customer 2",
     "to" : "Product A",
     "refs" : [
-        ObjectId("59fd39d74779d00117ffee3e"),
-        ObjectId("59fd3a384779d00117ffee4a")
+        ObjectId("5a0be13ae7a83c9369d6fb48"),
+        ObjectId("5a0be15ee7a83c9369d6fb56")
     ],
     "label" : "bought"
 }
 
 /* 4 */
 {
-    "_id" : ObjectId("59fd3a384779d00117ffee4a"),
+    "_id" : ObjectId("5a0be15ee7a83c9369d6fb56"),
     "from" : "Customer 2",
     "to" : "Product B",
     "refs" : [
-        ObjectId("59fd3a164779d00117ffee48"),
-        ObjectId("59fd3a594779d00117ffee54")
+        ObjectId("5a0be14de7a83c9369d6fb52"),
+        ObjectId("5a0bde97e7a83c9369d6fa60")
     ],
     "label" : "bought"
 }
 
 /* 5 */
 {
-    "_id" : ObjectId("59fd3a594779d00117ffee54"),
+    "_id" : ObjectId("5a0be172e7a83c9369d6fb60"),
     "from" : "Customer 3",
     "to" : "Product B",
     "refs" : [
-        ObjectId("59fd3a384779d00117ffee4a"),
-        ObjectId("59fd3a794779d00117ffee58")
+        ObjectId("5a0be15ee7a83c9369d6fb56"),
+        ObjectId("5a0be1cae7a83c9369d6fb8e")
     ],
     "label" : "bought"
 }
 
 /* 6 */
 {
-    "_id" : ObjectId("59fd3a794779d00117ffee58"),
+    "_id" : ObjectId("5a0be1cae7a83c9369d6fb8e"),
     "from" : "Customer 3",
-    "to" : "Product C",
-    "refs" : [
-        ObjectId("59fd3a594779d00117ffee54")
-    ],
+        "to" : "Product C",
+        "refs" : [
+            ObjectId("5a0be172e7a83c9369d6fb60")
+        ],
     "label" : "bought"
 }
                     </code>
@@ -396,7 +396,7 @@ db.product.aggregate( [
             as: "pathEdges",
             maxDepth: 2,
             depthField: 'steps',
-            restrictSearchWithMatch: { "label" : "bought" }
+            restrictSearchWithMatch: { "label" : "purchased" }
         }
     },
     { $project: { "edges" : "$pathEdges" } },
@@ -462,14 +462,17 @@ db.product.aggregate( [
                 <ul>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a> to select the target product node.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to find all outbound edges from target node.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get the data we want to work with.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a> to traverse the edges having label "invokes", up to 5 levels deep.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get an edges array.  Use $concatArrays to include the target node in the array.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get the edge data we want to work with.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a> to traverse the edges having label "invokes", up to 2 levels deep.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get an edges array.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> to get the documents in the edges  array.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a> on the "steps" field to list edges in order of traversal.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to get all nodes in the traversal path.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> to get the documents in the vertexes array.</li>
-                    <li>Use <a href="https://docs.mongodb.com/v3.2/reference/operator/aggregation/group/">$group</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to aggregate the documents from each traversal step into a single document with a list of edges and nodes.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to get all customer nodes in the traversal path.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a> to sort the customer nodes by order of traversal.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to get all product nodes in the traversal path.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a> to sort the product nodes by order of traversal.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/group/">$group</a> and <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to aggregate the documents from each traversal step into a single document with a list of edges and nodes.</li>
+                    <li>Use a <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/map/">$map</a> function to get distinct customer and product nodes in results.</li>
                 </ul>
             </div>
         </div>
@@ -503,98 +506,101 @@ db.product.aggregate( [
                 <!-- CODE SNIPPET EXAMPLE HERE USING THIS FROM BOOTSTRAP https://v4-alpha.getbootstrap.com/content/code/ -->
                 <pre>
                     <code>
-{
-    "edges" : [
-        {
-            "_id" : ObjectId("59fd39d74779d00117ffee3e"),
-            "from" : "Customer 1",
-            "to" : "Product A",
-            "refs" : [
-                ObjectId("59fd39ac4779d00117ffee34"),
-                ObjectId("59fd3a164779d00117ffee48")
-            ],
-            "label" : "bought",
-            "steps" : NumberLong(2)
-        },
-        {
-            "_id" : ObjectId("59fd3a164779d00117ffee48"),
-            "from" : "Customer 2",
-            "to" : "Product A",
-            "refs" : [
-                ObjectId("59fd39d74779d00117ffee3e"),
-                ObjectId("59fd3a384779d00117ffee4a")
-            ],
-            "label" : "bought",
-            "steps" : NumberLong(1)
-        },
-        {
-            "_id" : ObjectId("59fd3a384779d00117ffee4a"),
-            "from" : "Customer 2",
-            "to" : "Product B",
-            "refs" : [
-                ObjectId("59fd3a164779d00117ffee48"),
-                ObjectId("59fd3a594779d00117ffee54")
-            ],
-            "label" : "bought",
-            "steps" : NumberLong(0)
-        },
-        {
-            "_id" : ObjectId("59fd3a594779d00117ffee54"),
-            "from" : "Customer 3",
-            "to" : "Product B",
-            "refs" : [
-                ObjectId("59fd3a384779d00117ffee4a"),
-                ObjectId("59fd3a794779d00117ffee58")
-            ],
-            "label" : "bought",
-            "steps" : NumberLong(0)
-        },
-        {
-            "_id" : ObjectId("59fd3a794779d00117ffee58"),
-            "from" : "Customer 3",
-            "to" : "Product C",
-            "refs" : [
-                ObjectId("59fd3a594779d00117ffee54")
-            ],
-            "label" : "bought",
-            "steps" : NumberLong(1)
-        }
-    ],
-    "customers" : [
-        {
-            "_id" : ObjectId("59eec94405320bf9559658c6"),
-            "type" : "customer",
-            "name" : "Customer 1"
-        },
-        {
-            "_id" : ObjectId("59eec95005320bf9559658ca"),
-            "type" : "customer",
-            "name" : "Customer 2"
-        },
-        {
-            "_id" : ObjectId("59eec95d05320bf9559658ce"),
-            "type" : "customer",
-            "name" : "Customer 3"
-        }
-    ],
-    "products" : [
-        {
-            "_id" : ObjectId("59eec87905320bf955965887"),
-            "type" : "product",
-            "name" : "Product A"
-        },
-        {
-            "_id" : ObjectId("59eec8e405320bf9559658a3"),
-            "type" : "product",
-            "name" : "Product B"
-        },
-        {
-            "_id" : ObjectId("59eec8f305320bf9559658ab"),
-            "type" : "product",
-            "name" : "Product C"
-        }
-    ]
-}
+/* 1 */
+[
+    {
+        "edges" : [
+            {
+                "_id" : ObjectId("5a0be172e7a83c9369d6fb60"),
+                "from" : "Customer 3",
+                "to" : "Product B",
+                "refs" : [
+                    ObjectId("5a0be15ee7a83c9369d6fb56"),
+                    ObjectId("5a0be1cae7a83c9369d6fb8e")
+                ],
+                "label" : "purchased",
+                "steps" : NumberLong(0)
+            },
+            {
+                "_id" : ObjectId("5a0be15ee7a83c9369d6fb56"),
+                "from" : "Customer 2",
+                "to" : "Product B",
+                "refs" : [
+                    ObjectId("5a0be14de7a83c9369d6fb52"),
+                    ObjectId("5a0bde97e7a83c9369d6fa60")
+                ],
+                "label" : "purchased",
+                "steps" : NumberLong(0)
+            },
+            {
+                "_id" : ObjectId("5a0be1cae7a83c9369d6fb8e"),
+                "from" : "Customer 3",
+                "to" : "Product C",
+                "refs" : [
+                    ObjectId("5a0be172e7a83c9369d6fb60")
+                ],
+                "label" : "purchased",
+                "steps" : NumberLong(1)
+            },
+            {
+                "_id" : ObjectId("5a0be14de7a83c9369d6fb52"),
+                "from" : "Customer 2",
+                "to" : "Product A",
+                "refs" : [
+                    ObjectId("5a0be13ae7a83c9369d6fb48"),
+                    ObjectId("5a0be15ee7a83c9369d6fb56")
+                ],
+                "label" : "purchased",
+                "steps" : NumberLong(1)
+            },
+            {
+                "_id" : ObjectId("5a0be13ae7a83c9369d6fb48"),
+                "from" : "Customer 1",
+                "to" : "Product A",
+                "refs" : [
+                    ObjectId("5a0be126e7a83c9369d6fb40"),
+                    ObjectId("5a0be14de7a83c9369d6fb52")
+                ],
+                "label" : "purchased",
+                "steps" : NumberLong(2)
+            }
+        ],
+        "customers" : [
+            {
+                "_id" : ObjectId("5a0bdab3e7a83c9369d6f932"),
+                "name" : "Customer 3",
+                "steps" : NumberLong(0)
+            },
+            {
+                "_id" : ObjectId("5a0bda9fe7a83c9369d6f92c"),
+                "name" : "Customer 2",
+                "steps" : NumberLong(0)
+            },
+            {
+                "_id" : ObjectId("5a0bda87e7a83c9369d6f92a"),
+                "name" : "Customer 1",
+                "steps" : NumberLong(2)
+            }
+                    ],
+        "products" : [
+            {
+                "_id" : ObjectId("5a0bda22e7a83c9369d6f914"),
+                "name" : "Product B",
+                "steps" : NumberLong(0)
+            },
+            {
+                "_id" : ObjectId("5a0bda3ee7a83c9369d6f91a"),
+                "name" : "Product C",
+                "steps" : NumberLong(1)
+            },
+            {
+                "_id" : ObjectId("5a0bd9f8e7a83c9369d6f90c"),
+                "name" : "Product A",
+                "steps" : NumberLong(1)
+            }
+        ]
+    }
+]
                     </code>
                 </pre>
             </div>
