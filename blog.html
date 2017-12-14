@@ -137,7 +137,7 @@
             <div class="title col-12 col-md-8">
                 <!--<h2 class="align-center pb-3 mbr-fonts-style display-5">GRAPH DATABASE IN MONGODB 3.4 - PART 1: EXTERNAL EDGE COLLECTIONS</h2>-->
                 <h2 class="align-center pb-3 mbr-fonts-style display-5">EMULATING NEO4J GRAPH DB NODES AND EDGES IN MONGODB 3.6</h2>
-                <h3 class="mbr-section-subtitle align-center mbr-light mbr-fonts-style display-7"><em>By Chris Heino posted October 15, 2017</em></h3>
+                <h3 class="mbr-section-subtitle align-center mbr-light mbr-fonts-style display-7"><em>By Chris Heino posted December 14, 2017</em></h3>
                 
             </div>
         </div>
@@ -180,7 +180,6 @@
     <div class="container">
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
-            <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
                 The node data will be stored in two Mongo collections named customer and product, and we will use another collection for the edge data.
                 &nbsp;
@@ -339,9 +338,8 @@
         </div>
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
-            <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                This creates "You may also like" functionality.
+                This creates "Customers also bought" recommendations functionality.
                 <ol>
                     <li>Start with current product being viewed by customer</li>
                     <li>Traverse "purchased" edges to customers and products.</li>
@@ -353,13 +351,18 @@
         </div>
         <div class="media-container-row">&nbsp;</div>
         <div class="media-container-row">
-            <!-- TODO Should we name "vertexes" "products" instead? -->
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
                 <h3>MongoDB Query</h3>
-                The approach below is inspired by the way graph databases such as Neo4j or OrientDB store vertexes and edges as separate objects in the database.
-                For purposes of this example, we will create two collections in MongoDB, named vertexes and edges.  The documents in the vertexes collection will represent our e-commerce products and contain their attributes. The
-                edge collection documents will represent the edges or relationships between vertexes or nodes, including a relationship type, a from_id for the source node ID, a to_id for the target node ID, and any other custom
+                The approach below is inspired by the way graph databases such as Neo4j or OrientDB store nodes (a.k.a. vertexes) and edges as separate objects in the database.
+                For purposes of this example, we will create three collections in MongoDB: products, customers, and edges.  The documents in the products collection will represent our e-commerce products and contain their attributes, and our customers will be stored as documents in the customers collection. The
+                edge collection documents will represent the edges or relationships between nodes, including a relationship type, a from_id for the source node ID, a to_id for the target node ID, and any other custom
                 properties you want to include.  Note that one advantage of this approach is that we do not need to embed the edges within the nodes, in fact the nodes do not need to contain any relationship data whatsoever.&nbsp;
+            </div>
+        </div>
+        <div class="media-container-row">&nbsp;</div>
+        <div class="media-container-row">
+            <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
+                <blockquote>Although many of these features where added in MongoDB 3.3, version 3.6 is required for this example since 3.6 introduces the "let" and "pipeline" options we will use on the $lookup stage to fetch the node details from the resulting edges.&nbsp;</blockquote>
             </div>
         </div>
         <div class="media-container-row">&nbsp;</div>
@@ -463,7 +466,7 @@ db.product.aggregate( [
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/match/">$match</a> to select the target product node.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/">$lookup</a> to find all outbound edges from target node.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get the edge data we want to work with.</li>
-                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a> to traverse the edges having label "invokes", up to 2 levels deep.</li>
+                    <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/">$graphLookup</a> to traverse the edges having label "purchased", up to 2 levels deep.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/project/">$project</a> to get an edges array.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/">$unwind</a> to get the documents in the edges  array.</li>
                     <li>Use <a href="https://docs.mongodb.com/manual/reference/operator/aggregation/sort/">$sort</a> on the "steps" field to list edges in order of traversal.</li>
@@ -480,9 +483,6 @@ db.product.aggregate( [
 </section>
 
 <section class="mbr-section article content1 cid-qvbjsgNEPl" id="content2-7z" data-rv-view="549">
-
-     
-
     <div class="container">
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
@@ -609,7 +609,7 @@ db.product.aggregate( [
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
                 <h3>Conclusion</h3>
-                The results of this brief experiment are promising for MongoDB's graph query capabilities.  We were able to successfully model a directed property graph including both node and edge properties and then query those properties while traversing the graph.  The query syntax is more verbose than Neo4j's Cypher, but for those already using MongoDB for their application, this seems to be a feasible alternative to deploying a dedicated graph database.  Another advantage is that since the graph queries occur in Mongo's aggregation framework, it's easy to integrate with other Mongo features such as faceted search, whereas Neo4j does not support faceted search out of the box.  Thanks for reading.  In upcoming posts, I plan to cover the following related topics to improve on the example above.&nbsp;
+                The results of this brief experiment are promising for MongoDB's graph query capabilities.  We were able to successfully model a directed property graph including both node and edge properties and then query those properties while traversing the graph.  The query syntax is more verbose than Neo4j's Cypher and it remains to be seen how well it handles certain edge cases, but for those already using MongoDB for their application, this may be a feasible alternative to deploying a dedicated graph database.  Another advantage is that since the graph queries occur in Mongo's aggregation framework, it's easy to integrate with other Mongo features such as faceted search, whereas Neo4j does not support faceted search out of the box.  Thanks for reading.  In upcoming posts, I hope to cover some of the following related topics to improve on the example above.&nbsp;
                 <ul>
                     <li><strong>Creating a Java DSL (domain-specific language) for MongoDB graph queries</strong>, with a syntax similar to <a href="https://neo4j.com/developer/cypher-query-language/">Cypher</a></li>
                     <li><strong>A Java library to help manage the nodes and edges</strong></li>
