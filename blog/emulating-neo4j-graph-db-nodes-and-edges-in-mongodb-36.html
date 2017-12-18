@@ -8,16 +8,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="assets/images/ca-logo.png" type="image/x-icon">
   <meta name="description" content="HTML Blog Template - Free Download">
+
+  <meta property="og:title" content="Emulating Neo4j Graph DB Nodes and Edges in MongoDB 3.6"/>
+  <meta property="og:image" content="//www.commonaspect.com/assets/images/blog/fig1.png"/>
+  <meta property="og:description" content="In this article, we explore a technique for modelling graph nodes and edges in MongoDB using multiple collections."/>
+  <meta property="og:url" content="//www.commonaspect.com/blog/emulating-neo4j-graph-db-nodes-and-edges-in-mongodb-36.html" />
+
   <title>Blog | Common Aspect, LLC</title>
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
-  <link rel="stylesheet" href="assets/tether/tether.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="assets/shopping-cart/minicart-theme.css">
-  <link rel="stylesheet" href="assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
-  <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
+  <link rel="stylesheet" href="../assets/tether/tether.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="../assets/shopping-cart/minicart-theme.css">
+  <link rel="stylesheet" href="../assets/dropdown/css/style.css">
+  <link rel="stylesheet" href="../assets/theme/css/style.css">
+  <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
 
     <style>
         .cert-logo {
@@ -76,7 +82,7 @@
             </div>
             -->
             <div class="navbar-brand">
-                <a href="http://www.commonaspect.com" class="navbar-logo"><img src="assets/images/ca-logo.png" alt="Common Aspect logo"></a>
+                <a href="http://www.commonaspect.com" class="navbar-logo"><img src="../assets/images/ca-logo.png" alt="Common Aspect logo"></a>
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -103,7 +109,7 @@
 
                 <li class="nav-item"><a class="nav-link link text-white display-4" href="http://www.commonaspect.com#footer2-8z">CONTACT</a></li>
 
-                <li class="nav-item"><a class="nav-link link text-white display-4" href="blog.html">BLOG</a></li>
+                <li class="nav-item"><a class="nav-link link text-white display-4" href="http://www.commonaspect.com/blog.html">BLOG</a></li>
 
             </ul>
         </div>
@@ -167,7 +173,7 @@
 <section class="cid-qvbjxOlHgO" id="image1-80" data-rv-view="550">
     <figure class="mbr-figure container">
         <div class="image-block" style="width: 66%;">
-            <img src="assets/images/blog/fig1.png" width="851" alt="Mobirise" title="" media-simple="true">
+            <img src="../assets/images/blog/fig1.png" width="851" alt="Mobirise" title="" media-simple="true">
             <!--
             <figcaption class="mbr-figure-caption mbr-figure-caption-over">
                 <div class="container pb-5 mbr-white align-center mbr-fonts-style display-7">Vestibulum id nisl eu ipsum ultrices sodales. Donec non nibh at diam porta porttitor. Aenean dignissim porttitor aliquam. Etiam a sapien quis velit rhoncus pulvinar. Nunc dictum pretium lacus, nec convallis mauris vestibulum sit amet. Nam pretium tristique mauris in tempor. Phasellus consequat ipsum quis libero tristique ornare. Nulla ante libero, viverra at eros eu, fermentum rutrum lacus.</div>
@@ -681,22 +687,22 @@ db.product.aggregate( [
 </section>
 
 
-  <script src="assets/web/assets/jquery/jquery.min.js"></script>
-  <script src="assets/popper/popper.min.js"></script>
-  <script src="assets/tether/tether.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/smooth-scroll/smooth-scroll.js"></script>
-  <script src="assets/shopping-cart/minicart.js"></script>
-  <script src="assets/shopping-cart/jquery.easing.min.js"></script>
-  <script src="assets/shopping-cart/minicart-customizer.js"></script>
-  <script src="assets/dropdown/js/script.min.js"></script>
-  <script src="assets/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
-  <script src="assets/jarallax/jarallax.min.js"></script>
-  <script src="assets/jquery-mb-ytplayer/jquery.mb.ytplayer.min.js"></script>
-  <script src="assets/jquery-mb-vimeo_player/jquery.mb.vimeo_player.js"></script>
-  <script src="assets/touch-swipe/jquery.touch-swipe.min.js"></script>
-  <script src="assets/theme/js/script.js"></script>
-  <script src="assets/mobirise-slider-video/script.js"></script>
+  <script src="../assets/web/assets/jquery/jquery.min.js"></script>
+  <script src="../assets/popper/popper.min.js"></script>
+  <script src="../assets/tether/tether.min.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../assets/smooth-scroll/smooth-scroll.js"></script>
+  <script src="../assets/shopping-cart/minicart.js"></script>
+  <script src="../assets/shopping-cart/jquery.easing.min.js"></script>
+  <script src="../assets/shopping-cart/minicart-customizer.js"></script>
+  <script src="../assets/dropdown/js/script.min.js"></script>
+  <script src="../assets/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
+  <script src="../assets/jarallax/jarallax.min.js"></script>
+  <script src="../assets/jquery-mb-ytplayer/jquery.mb.ytplayer.min.js"></script>
+  <script src="../assets/jquery-mb-vimeo_player/jquery.mb.vimeo_player.js"></script>
+  <script src="../assets/touch-swipe/jquery.touch-swipe.min.js"></script>
+  <script src="../assets/theme/js/script.js"></script>
+  <script src="../assets/mobirise-slider-video/script.js"></script>
   
   
 </body>
