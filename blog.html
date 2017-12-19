@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="assets/dropdown/css/style.css">
   <link rel="stylesheet" href="assets/theme/css/style.css">
   <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="assets/socicon/css/styles.css">
 
     <style>
         .cert-logo {
@@ -152,7 +153,7 @@
                 Multi-modal NoSQL database MongoDB added several useful new features since version 3.3, including the <a href="#">$lookup</a>, <a href="#">$graphlookup</a>, and <a href="#">$facet</a> aggregation stages. In this article,
                 I will explore how well the new $graphlookup feature compares to the graph querying capabilities of a specialized graph database such as Neo4j.  In particular, we will explain a technique storing graph vertexes and
                 edges in separate MongoDB collections to allow maximum flexibility for querying based on both vertex and edge properties.  At the time of writing, I did not find any concrete examples of this technique online, although the
-                MongoDB slide presentation <a target="_blank" href="https://www.slideshare.net/mongodb/mongodb-europe-2016-graph-operations-with-mongodb">here</a> makes mention of edge collections.  This example is based on my own experimentation.&nbsp;
+                MongoDB slide presentation <a target="_blank" href="https://www.slideshare.net/mongodb/webinar-working-with-graph-data-in-mongodb?next_slideshow=1">here</a> makes mention of edge collections.  This example is based on my own experimentation.&nbsp;
             </div>
         </div>
         <div class="media-container-row">&nbsp;</div>
@@ -498,7 +499,7 @@ db.product.aggregate( [
     <div class="container">
         <div class="media-container-row">
             <div class="mbr-text col-12 col-md-8 mbr-fonts-style display-7">
-                <blockquote>The refs property is necessary to allow bidirectional traversal, similar to "both" in Neo4j Cypher.  It contains an array of ObjectIds for all other edges intersecting at that node.&nbsp;</blockquote>
+                <blockquote>The refs property is necessary to allow bidirectional traversal, similar to "both" in Neo4j Cypher.  It contains an array of ObjectIds for all other edges intersecting with the current edge at any node.&nbsp;</blockquote>
             </div>
         </div>
     </div>
@@ -663,6 +664,33 @@ db.product.aggregate( [
 </section>
 -->
 
+<section class="cid-qvbXwO9Wgu" id="social-buttons1-8w" data-rv-view="646">
+    <div class="container">
+        <div class="media-container-row">
+            <div class="col-md-8 align-center">
+                <h2 class="pb-3 mbr-section-title mbr-fonts-style display-2">
+                    SHARE THIS PAGE!
+                </h2>
+                <div>
+                    <div class="mbr-social-likes" data-counters="false">
+                        <span class="btn btn-social facebook mx-2" title="Share link on Facebook">
+                            <i class="socicon socicon-facebook"></i>
+                        </span>
+                        <span class="btn btn-social twitter mx-2" title="Share link on Twitter">
+                            <i class="socicon socicon-twitter"></i>
+                        </span>
+                        <span class="btn btn-social plusone mx-2" title="Share link on Google+">
+                            <i class="socicon socicon-googleplus"></i>
+                        </span>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section once="" class="cid-qvbpqoTMWJ" id="footer6-8d" data-rv-view="577">
 
     
@@ -692,12 +720,12 @@ db.product.aggregate( [
   <script src="assets/dropdown/js/script.min.js"></script>
   <script src="assets/bootstrap-carousel-swipe/bootstrap-carousel-swipe.js"></script>
   <script src="assets/jarallax/jarallax.min.js"></script>
+  <script src="assets/social-likes/social-likes.js"></script>
   <script src="assets/jquery-mb-ytplayer/jquery.mb.ytplayer.min.js"></script>
   <script src="assets/jquery-mb-vimeo_player/jquery.mb.vimeo_player.js"></script>
   <script src="assets/touch-swipe/jquery.touch-swipe.min.js"></script>
   <script src="assets/theme/js/script.js"></script>
   <script src="assets/mobirise-slider-video/script.js"></script>
-  
   
 </body>
 </html>
